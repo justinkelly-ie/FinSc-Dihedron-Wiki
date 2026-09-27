@@ -10,10 +10,11 @@
 module Wiki.Product_And_Chain_Rules
 
 import QuickCheck
-import Core.BoxInt
-import Math.Multiset
-import Math.Infinitesimal
-import Core.Polynumber
+import Stage0.BoxInt
+import Stage0.Multiset
+import Stage1.Math.Infinitesimal
+
+import Stage1.Polynumber
 
 %default total
 ```

@@ -5,9 +5,11 @@ This observation module formally verifies the quantum mechanical properties of t
 ```idris
 module Wiki.QuantumMechanicsAlgebra
 
-import public Math.Dihedron.Dihedron
-import public Math.Dihedron.Subalgebras
-import public Core.BoxInt
+import public Stage1.Dihedron
+import public Stage1.Subalgebras
+import public Stage0.DihedronStream
+import public Stage0.BoxInt
+
 import public QuickCheck
 import Data.Fuel
 

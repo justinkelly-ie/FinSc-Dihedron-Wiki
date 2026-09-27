@@ -10,12 +10,14 @@
 module Wiki.Finite_Field_Calculus
 
 import QuickCheck
-import Core.BoxInt
-import Math.Multiset
-import Math.Infinitesimal
-import Core.Polynumber
-import Core.VexelMaxel
-import Math.Dihedron.Dihedron
+import Stage0.BoxInt
+import Stage0.Multiset
+import Stage1.Math.Infinitesimal
+
+import Stage1.Polynumber
+import Stage1.VexelMaxel
+import Stage1.Dihedron
+
 
 %default total
 ```

@@ -10,15 +10,18 @@
 module Wiki.Dihedrons_And_Infinitesimals
 
 import QuickCheck
-import Core.BoxInt
-import Math.Multiset
-import Math.Infinitesimal
-import Math.OnSeq.FusedStream
+import Stage0.BoxInt
+import Stage0.Multiset
+import Stage1.Math.Infinitesimal
+
+import Stage0.OnSeq.FusedStream
 import Data.Fuel
-import Core.VexelMaxel
-import Core.Polynumber
-import Math.Dihedron.Dihedron
-import Math.Dihedron.Subalgebras
+import Stage1.VexelMaxel
+import Stage1.Polynumber
+import Stage1.Dihedron
+
+import Stage1.Subalgebras
+
 
 %default total
 
