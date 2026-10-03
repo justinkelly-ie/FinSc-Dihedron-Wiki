@@ -1,7 +1,7 @@
 package FinSc-Dihedron-Wiki
 version = 0.2.0
 
-depends = FinSc-Multiset, FinSc-Metric-Substrate, FinSc-Multiset-Transform, FinSc-Quantum-Coherence, base, FinSc-Dihedron, idris2-QuickCheck, linear
+depends = FinSc-Multiset, FinSc-Metric-Substrate, FinSc-Phase-Unfolding, FinSc-Quantum-Coherence, base, FinSc-Dihedron, idris2-QuickCheck, linear
 sourcedir = "Library"
 
 modules = Wiki.Dihedrons_And_Infinitesimals,
