@@ -43,17 +43,11 @@ record VerifiedDihedralGroupState where
   quadrance2 : Nat
   0 actionPrf : DihedralGroupActionWitness quadrance1 quadrance2
 
-||| $O(1)$ allocation deforested Dihedral group stream transducer using fusedHylomorphism
-public export covering
+||| $O(1)$ allocation deforested Dihedral group stream transducer using foldStreamNat
+public export
 fusedDihedralGroupStream : Fuel -> List (Nat, Nat) -> Nat
-fusedDihedralGroupStream f items =
-  fusedHylomorphism f
-    (\st => case st of
-              [] => Done
-              (d1, d2) :: rest => Yield (d1 + d2) rest)
-    (\val, acc => val + acc)
-    0
-    items
+fusedDihedralGroupStream _ items =
+  foldStreamNat (length items) (\acc, (d1, d2) => acc + d1 + d2) 0 (stream items)
 ```
 
 ## 1. 🏛️ Three Matrix Geometries
@@ -65,17 +59,22 @@ Given any field $F$, the $2 \times 2$ matrix algebra $M_2(F)$ contains three can
 - **Green** $C_g(F)$: $k^2 = +1$ or $\varepsilon^2 = 0$ (Null / Degenerate)
 
 ```idris
-||| Verifies that Blue, Red, and Green subalgebra quadrances match their metric signatures
+||| Compile-time auditable boolean for subalgebra metric signatures
 public export
-prop_subalgebraSignatures : Property
-prop_subalgebraSignatures =
+audit_subalgebraSignatures : Bool
+audit_subalgebraSignatures =
   let a = intToBoxInt 5
       b = intToBoxInt 3
       qBlue  = quadranceDihedron (toDihedronBlue (MkBlue a b))
       qRed   = quadranceDihedron (toDihedronRed (MkRed a b))
       qGreen = quadranceDihedron (toDihedronGreen (MkGreen a b))
       streamSum = fusedDihedralGroupStream (limit 100) [(16, 16), (34, 34)]
-  in property (unwrapBox qBlue == 34 && unwrapBox qRed == 16 && unwrapBox qGreen == 16 && streamSum == 100)
+  in (unwrapBox qBlue == 34 && unwrapBox qRed == 16 && unwrapBox qGreen == 16 && streamSum == 100)
+
+||| Verifies that Blue, Red, and Green subalgebra quadrances match their metric signatures
+public export
+prop_subalgebraSignatures : Property
+prop_subalgebraSignatures = property audit_subalgebraSignatures
 ```
 
 ---
@@ -87,14 +86,19 @@ Evaluating a `Polynumber` at a dual number $a + b\varepsilon$ yields exact diffe
 $$P(a + b\varepsilon) = P(a) + P'(a)\cdot b\varepsilon$$
 
 ```idris
-||| Verifies exact Faulhaber derivative readout via dual complex numbers
+||| Compile-time auditable boolean for Faulhaber dual complex derivative
 public export
-prop_dualDerivativeTheorem : Property
-prop_dualDerivativeTheorem =
+audit_dualDerivativeTheorem : Bool
+audit_dualDerivativeTheorem =
   let -- P(x) = 4 + 2x + x³  => P'(x) = 2 + 3x²
       poly = MkPolynumber [intToBoxInt 4, intToBoxInt 2, intToBoxInt 0, intToBoxInt 1]
       (val, deriv) = autoDiffAt poly (intToBoxInt 2)
       -- P(2) = 4 + 4 + 8 = 16
       -- P'(2) = 2 + 12 = 14
-  in property (unwrapBox val == 16 && unwrapBox deriv == 14)
+  in (unwrapBox val == 16 && unwrapBox deriv == 14)
+
+||| Verifies exact Faulhaber derivative readout via dual complex numbers
+public export
+prop_dualDerivativeTheorem : Property
+prop_dualDerivativeTheorem = property audit_dualDerivativeTheorem
 ```

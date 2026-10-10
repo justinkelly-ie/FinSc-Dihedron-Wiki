@@ -7,6 +7,7 @@ module Wiki.QuantumMechanicsAlgebra
 
 import public Stage1.Dihedron
 import public Stage1.Subalgebras
+import public Stage1.DiracSpinor
 import public Stage0.DihedronStream
 import public Stage0.BoxInt
 
@@ -68,7 +69,7 @@ prop_monadicPathBinding d =
 
 ||| Property 5: Deforested Fused Feynman Path Propagator Equivalence
 ||| Verifies multi-step Pauli spinor path propagation via fusedComputePauliPathPropagator.
-public export covering
+public export
 prop_fusedPauliPathPropagator : Bool
 prop_fusedPauliPathPropagator =
   let initialSpinor = MkPauliSpinor (MkDihedron 1 0 0 0) (MkDihedron 0 1 0 0)
@@ -101,9 +102,48 @@ qc_bluePhaseQuadranceInvariance =
   in property (prop_bluePhaseQuadranceInvariance d1 && prop_bluePhaseQuadranceInvariance d2)
 
 ||| QuickCheck wrapper property for Monadic & Fused Path Binding
-public export covering
+public export
 qc_monadicPathBinding : Property
 qc_monadicPathBinding =
   let d1 = MkDihedron 10 20 30 40
   in property (prop_monadicPathBinding d1 && prop_fusedPauliPathPropagator)
+
+||| Property 6: Discrete Dirac Spinor Gamma-0 Identity (γ^0)² = I
+public export
+prop_diracGamma0Identity : DiracSpinor -> Bool
+prop_diracGamma0Identity s = gamma0SquareIdentity s == s
+
+||| Property 7: Dihedron and Dirac Spinor Quadrance Equivalence
+public export
+prop_diracDihedronQuadranceEquiv : Dihedron -> Bool
+prop_diracDihedronQuadranceEquiv d = quadranceDihedron d == spinorQuadrance (dihedronToSpinor d)
+
+||| Property 8: Dihedron Functorial Projection to QuadStream Multiset
+public export
+prop_dihedronToQuadStream : Dihedron -> Bool
+prop_dihedronToQuadStream d =
+  let (MkQuadStream e h p s) = dihedronToQuadStream d
+      eSum = multisetSum e
+      hSum = multisetSum h
+      pSum = multisetSum p
+      sSum = multisetSum s
+  in (eSum == scalarA d) && (hSum == blueB d) && (pSum == redC d) && (sSum == greenD d)
+
+||| Compile-time auditable boolean for Dirac Gamma-0 square identity
+public export
+prop_diracGamma0Audit : Bool
+prop_diracGamma0Audit = prop_diracGamma0Identity (MkDiracSpinor 1 2 3 4)
+
+||| Compile-time auditable boolean for Dirac Spinor Quadrance Equivalence
+public export
+prop_diracQuadranceAudit : Bool
+prop_diracQuadranceAudit = prop_diracDihedronQuadranceEquiv (MkDihedron 1 2 3 4)
+
+||| QuickCheck wrapper property for Dirac Gamma-0 and Quadrance Equivalence
+public export
+qc_diracCliffordAlgebra : Property
+qc_diracCliffordAlgebra =
+  let s1 = MkDiracSpinor 1 2 3 4
+      d1 = MkDihedron 1 2 3 4
+  in property (prop_diracGamma0Identity s1 && prop_diracDihedronQuadranceEquiv d1 && prop_dihedronToQuadStream d1)
 ```
