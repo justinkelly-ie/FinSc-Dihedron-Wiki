@@ -15,6 +15,7 @@ import Stage0.Multiset
 import Stage1.Math.Infinitesimal
 
 import Stage0.OnSeq.FusedStream
+import Stage0.StructuralFuel
 import Data.Fuel
 import Stage1.VexelMaxel
 import Stage1.Polynumber
@@ -43,11 +44,11 @@ record VerifiedDihedralGroupState where
   quadrance2 : Nat
   0 actionPrf : DihedralGroupActionWitness quadrance1 quadrance2
 
-||| $O(1)$ allocation deforested Dihedral group stream transducer using foldStreamNat
+||| $O(1)$ allocation deforested Dihedral group stream transducer using foldStreamNat and model-indexed GohFuel
 public export
-fusedDihedralGroupStream : Fuel -> List (Nat, Nat) -> Nat
-fusedDihedralGroupStream _ items =
-  foldStreamNat (length items) (\acc, (d1, d2) => acc + d1 + d2) 0 (stream items)
+fusedDihedralGroupStream : GohFuel cap -> List (Nat, Nat) -> Nat
+fusedDihedralGroupStream fuel items =
+  foldStreamNat (gohSteps fuel) (\acc, (d1, d2) => acc + d1 + d2) 0 (stream items)
 ```
 
 ## 1. 🏛️ Three Matrix Geometries
@@ -68,7 +69,7 @@ audit_subalgebraSignatures =
       qBlue  = quadranceDihedron (toDihedronBlue (MkBlue a b))
       qRed   = quadranceDihedron (toDihedronRed (MkRed a b))
       qGreen = quadranceDihedron (toDihedronGreen (MkGreen a b))
-      streamSum = fusedDihedralGroupStream (limit 100) [(16, 16), (34, 34)]
+      streamSum = fusedDihedralGroupStream ellipticGohFuelModel [(16, 16), (34, 34)]
   in (unwrapBox qBlue == 34 && unwrapBox qRed == 16 && unwrapBox qGreen == 16 && streamSum == 100)
 
 ||| Verifies that Blue, Red, and Green subalgebra quadrances match their metric signatures

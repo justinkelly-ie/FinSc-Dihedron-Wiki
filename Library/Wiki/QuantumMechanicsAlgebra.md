@@ -10,6 +10,7 @@ import public Stage1.Subalgebras
 import public Stage1.DiracSpinor
 import public Stage0.DihedronStream
 import public Stage0.BoxInt
+import public Stage0.StructuralFuel
 
 import public QuickCheck
 import Data.Fuel
@@ -75,7 +76,7 @@ prop_fusedPauliPathPropagator =
   let initialSpinor = MkPauliSpinor (MkDihedron 1 0 0 0) (MkDihedron 0 1 0 0)
       uPhase1 = MkDihedron 0 1 0 0 -- i phase
       uPhase2 = MkDihedron 0 1 0 0 -- i phase (i * i = -1)
-      finalSpinor = fusedComputePauliPathPropagator (limit 100) initialSpinor [uPhase1, uPhase2]
+      finalSpinor = fusedComputePauliPathPropagatorFuelModel (gohFuelForCapacity 2) initialSpinor [uPhase1, uPhase2]
       expectedSpinUp = MkDihedron (-1) 0 0 0
       expectedSpinDown = MkDihedron 0 (-1) 0 0
   in spinUp finalSpinor == expectedSpinUp && spinDown finalSpinor == expectedSpinDown
