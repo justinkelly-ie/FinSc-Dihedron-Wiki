@@ -15,7 +15,6 @@ import Stage0.Multiset
 import Stage1.Math.Infinitesimal
 
 import Stage1.Polynumber
-import Stage1.VexelMaxel
 import Stage1.Dihedron
 
 

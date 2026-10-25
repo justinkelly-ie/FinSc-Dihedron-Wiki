@@ -17,7 +17,6 @@ import Stage1.Math.Infinitesimal
 import Stage0.OnSeq.FusedStream
 import Stage0.StructuralFuel
 import Data.Fuel
-import Stage1.VexelMaxel
 import Stage1.Polynumber
 import Stage1.Dihedron
 
